@@ -1,0 +1,56 @@
+.wrap { padding: 24px; max-width: 1200px; margin: 0 auto; width: 100%; }
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.addPlaceholder { display: flex; align-items: center; gap: 8px; padding: 12px 16px; border: 1.5px dashed var(--border-md); border-radius: 14px; color: var(--muted); font-size: 13px; cursor: pointer; }
+.addPlaceholder:hover { border-color: var(--p1); color: var(--p1); }
+
+/* Modal Styles */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  z-index: 1000;
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(100%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.modalContent {
+  background: var(--bg);
+  border-radius: 24px 24px 0 0;
+  padding: 20px;
+  max-height: 80vh;
+  width: 100%;
+  max-width: 600px;
+  overflow-y: auto;
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.modalHeader h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+@media (max-width: 768px) {
+  .grid { grid-template-columns: 1fr; }
+  .wrap { padding: 16px; }
+  .modalContent { max-height: 90vh; }
+}

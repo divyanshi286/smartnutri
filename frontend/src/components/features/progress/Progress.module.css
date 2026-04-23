@@ -1,0 +1,11 @@
+.wrap { padding: 24px; max-width: 1200px; margin: 0 auto; }
+.statsGrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 20px; }
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.barChart { display: flex; align-items: flex-end; gap: 8px; height: 120px; padding: 8px 4px; border-bottom: 1px solid var(--border); margin-bottom: 8px; }
+.barCol { display: flex; flex-direction: column; align-items: center; gap: 5px; flex: 1; }
+.bar { width: 100%; border-radius: 6px 6px 0 0; min-height: 4px; transition: height 0.4s var(--ease-smooth); }
+.barDay { font-size: 10px; font-weight: 700; color: var(--muted); white-space: nowrap; text-align: center; }
+.barDay span { font-size: 9px; color: var(--muted2); }
+.barToday .barDay { color: var(--p1); font-size: 11px; }
+.chartMeta { display: flex; gap: 16px; font-size: 12px; color: var(--muted); flex-wrap: wrap; }
+@media (max-width: 768px) { .grid { grid-template-columns: 1fr; } .wrap { padding: 16px; } }

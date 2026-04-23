@@ -1,0 +1,5 @@
+.wrap { padding: 24px; }
+.choice { display: flex; align-items: center; gap: 12px; padding: 14px 16px; border: 1.5px solid var(--border-md); border-radius: 14px; cursor: pointer; transition: .15s; margin-bottom: 9px; background: var(--card); }
+.choice:hover { border-color: var(--p1); background: color-mix(in srgb, var(--p1) 5%, var(--card)); }
+.sel { border-color: var(--p1) !important; background: color-mix(in srgb, var(--p1) 8%, var(--card)) !important; }
+.choiceIco { font-size: 24px; flex-shrink: 0; }

@@ -1,0 +1,10 @@
+.wrap { padding: 24px; max-width: 1200px; margin: 0 auto; }
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.card { background: var(--card); border: 1px solid var(--border); border-radius: 20px; box-shadow: var(--shadow-sm); overflow: hidden; }
+.cardHd { padding: 16px 20px 0; }
+.cardBody { padding: 16px 20px 20px; }
+.safetyCard { background: linear-gradient(135deg,#fffbeb,#fef9c3); border: 2px solid #f59e0b; border-radius: 20px; padding: 20px; margin-bottom: 12px; }
+.sosCard { background: #fff1f2; border: 1.5px solid #fecaca; border-radius: 16px; padding: 16px; }
+.sosTitle { font-size: 13px; font-weight: 700; color: #9f1239; margin-bottom: 8px; }
+.sosBody { font-size: 13px; color: #7f1d1d; line-height: 1.9; }
+@media (max-width: 768px) { .grid { grid-template-columns: 1fr; } .wrap { padding: 16px; } }

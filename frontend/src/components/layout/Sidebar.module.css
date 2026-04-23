@@ -1,0 +1,56 @@
+.sidebar {
+  position: fixed; top: 0; left: 0; bottom: 0; width: var(--sidebar-w);
+  background: var(--surface); border-right: 1px solid var(--border);
+  display: flex; flex-direction: column; z-index: 200; overflow: hidden;
+  transition: transform 0.3s var(--ease-smooth), background 0.4s;
+}
+.brand { display: flex; align-items: center; gap: 11px; padding: 20px 20px 16px; border-bottom: 1px solid var(--border); }
+.brandMark { width: 36px; height: 36px; border-radius: 11px; background: var(--grad); display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; box-shadow: 0 4px 12px color-mix(in srgb, var(--p1) 35%, transparent); }
+.brandName { font-family: var(--ff-display); font-weight: 700; font-size: 17px; line-height: 1.1; }
+.brandTag { font-size: 10px; color: var(--muted); font-weight: 600; }
+
+.userRow { display: flex; align-items: center; gap: 10px; padding: 14px 20px; border-bottom: 1px solid var(--border); }
+.avatar { width: 38px; height: 38px; border-radius: 12px; background: var(--grad); display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; font-size: 14px; flex-shrink: 0; }
+.userName { font-weight: 700; font-size: 13.5px; }
+.userSub { font-size: 11px; color: var(--muted); }
+.userBadge { font-size: 11px; color: var(--p1); font-weight: 700; margin-top: 1px; }
+
+.logoutBtn {
+  margin: 8px 8px 0; padding: 9px 12px; border-radius: 10px; border: 1px solid var(--border);
+  background: color-mix(in srgb, var(--p1) 8%, transparent);
+  color: var(--p1); font-weight: 600; font-size: 13px; cursor: pointer;
+  transition: all 0.15s; width: calc(100% - 16px);
+}
+.logoutBtn:hover {
+  background: color-mix(in srgb, var(--p1) 15%, transparent);
+  border-color: var(--p1);
+}
+
+.nav { flex: 1; overflow-y: auto; padding: 4px 0 8px; scrollbar-width: none; }
+.nav::-webkit-scrollbar { display: none; }
+.navSection { padding: 10px 12px 4px; font-size: 10px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: var(--muted2); }
+.navItem {
+  display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 10px;
+  margin: 1px 8px; font-size: 13.5px; font-weight: 500; cursor: pointer;
+  transition: background 0.15s, color 0.15s; color: var(--text); border: none; background: none;
+  width: calc(100% - 16px); text-align: left;
+}
+.navIco { width: 28px; height: 28px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 15px; flex-shrink: 0; background: var(--border); transition: background 0.15s; }
+.navItem:hover { background: var(--border); }
+.navOn { background: color-mix(in srgb, var(--p1) 12%, transparent) !important; color: var(--p1) !important; font-weight: 700 !important; }
+.navOn .navIco { background: color-mix(in srgb, var(--p1) 18%, transparent); }
+
+.footer { padding: 12px; border-top: 1px solid var(--border); }
+.themeSwitcher { display: flex; gap: 5px; margin-bottom: 10px; }
+.thBtn { flex: 1; padding: 6px 4px; border-radius: 8px; border: 2px solid transparent; font-size: 10px; font-weight: 700; cursor: pointer; background: var(--canvas); color: var(--muted); transition: 0.15s; text-align: center; }
+.thBtnActive { border-color: var(--p1) !important; color: var(--p1) !important; background: color-mix(in srgb, var(--p1) 8%, transparent) !important; }
+.darkToggle { display: flex; align-items: center; justify-content: space-between; padding: 8px 12px; border-radius: 10px; background: var(--canvas); font-size: 12px; font-weight: 600; cursor: pointer; border: 1px solid var(--border); }
+.togglePill { width: 36px; height: 20px; border-radius: 10px; background: var(--border-md); position: relative; transition: background 0.2s; }
+.togglePill::after { content: ''; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 50%; background: #fff; transition: transform 0.2s; }
+:global(.dark) .togglePill { background: var(--grad); }
+:global(.dark) .togglePill::after { transform: translateX(16px); }
+
+@media (max-width: 900px) {
+  .sidebar { transform: translateX(-240px); width: 240px; }
+  .open { transform: none; box-shadow: var(--shadow-lg); }
+}
