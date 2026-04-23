@@ -1,3 +1,3 @@
 #!/bin/bash
 pip install --upgrade pip setuptools wheel
-pip install --only-binary :all: -r requirements.txt
+pip install --prefer-binary --no-build-isolation -r requirements.txt
