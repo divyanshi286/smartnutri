@@ -30,9 +30,9 @@ export default function Dashboard() {
             <div className={styles.heroName}>Good to see you, {dash?.user?.name}!</div>
             <div className={styles.heroSub}>{dash?.cycleSummary?.label}</div>
             <div className={styles.heroMeta}>
-              <span className={styles.heroBadge}>🔥 {dash?.user?.streak ?? 0}-day streak</span>
-              <span className={styles.heroBadge}>💪 {Math.round(((dash?.nutrition?.protein?.current ?? 0) / (dash?.nutrition?.protein?.goal ?? 1)) * 100)}% protein goal hit</span>
-              <span className={styles.heroBadge}>🌸 {dash?.cycleSummary?.label || 'Cycle progress available'}</span>
+              <span className={styles.heroBadge}>Streak: {dash?.user?.streak ?? 0} days</span>
+              <span className={styles.heroBadge}>Protein: {Math.round(((dash?.nutrition?.protein?.current ?? 0) / (dash?.nutrition?.protein?.goal ?? 1)) * 100)}%</span>
+              <span className={styles.heroBadge}>{dash?.cycleSummary?.label || 'Cycle tracking available'}</span>
             </div>
           </>
         )}
@@ -57,16 +57,16 @@ export default function Dashboard() {
             ) : (
               <div className={styles.ringsRow}>
                 <GoalRing value={dash?.nutrition?.calories?.current || 1380} goal={dash?.nutrition?.calories?.goal || 1800} label="Calories" unit="" color="var(--p1)"/>
-                <GoalRing value={`${dash?.nutrition?.protein?.current || 78}g`} goal={110} label="Protein" unit="" color="#3b82f6"/>
-                <GoalRing value={`${dash?.nutrition?.carbs?.current || 42}g`} goal={130} label="Carbs" unit="" color="#f59e0b"/>
-                <GoalRing value={`${dash?.nutrition?.water?.current || 1.5}L`} goal={2.5} label="Water" unit="" color="#06b6d4"/>
+                <GoalRing value={Number(dash?.nutrition?.protein?.current) || 78} goal={110} label="Protein" unit="" color="#3b82f6"/>
+                <GoalRing value={Number(dash?.nutrition?.carbs?.current) || 42} goal={130} label="Carbs" unit="" color="#f59e0b"/>
+                <GoalRing value={Number(dash?.nutrition?.water?.current) || 1.5} goal={2.5} label="Water" unit="" color="#06b6d4"/>
               </div>
             )}
           </CardBody>
         </Card>
 
         <Card>
-          <CardHeader title="🤖 AI Nudge"/>
+          <CardHeader title="AI Coach"/>
           <CardBody>
             {dashLoading
               ? <><Skeleton h={14}/><Skeleton h={14} w="80%" style={{ marginTop: 8 }}/></>
@@ -83,8 +83,8 @@ export default function Dashboard() {
       <div className={styles.bottomRow}>
         <Card>
           <CardHeader
-            title="🍽 Today's Meals"
-            action={<span style={{ fontSize: 13, fontWeight: 700, color: 'var(--p1)', cursor: 'pointer' }}>＋ Add Meal</span>}
+            title="Meal Log"
+            action={<span style={{ fontSize: 13, fontWeight: 700, color: 'var(--p1)', cursor: 'pointer' }}>+ Add Meal</span>}
           />
           <CardBody>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
@@ -95,7 +95,7 @@ export default function Dashboard() {
                 ))
               }
               <div className={styles.addMealRow}>
-                <span>🌙</span> Log dinner · expected 7:00 PM
+                <span>•</span> Log dinner · expected 7:00 PM
               </div>
             </div>
           </CardBody>
@@ -103,7 +103,7 @@ export default function Dashboard() {
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
           <Card>
-            <CardHeader title="📊 Daily Progress"/>
+            <CardHeader title="Daily Progress"/>
             <CardBody>
               {mealsLoading
                 ? [1,2,3,4].map(i => <Skeleton key={i} h={28} radius={4} style={{ marginBottom: 12 }}/>)
@@ -115,7 +115,7 @@ export default function Dashboard() {
           </Card>
 
           <Card>
-            <CardHeader title="🏅 Achievements"/>
+            <CardHeader title="Achievements"/>
             <CardBody>
               <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
                 {dashLoading
@@ -129,7 +129,7 @@ export default function Dashboard() {
       </div>
 
       {/* FAB */}
-      <button className={styles.fab} onClick={() => setVoiceOpen(true)}>🎙</button>
+      <button className={styles.fab} onClick={() => setVoiceOpen(true)}>◉</button>
     </div>
   )
 }

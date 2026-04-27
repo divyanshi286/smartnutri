@@ -5,7 +5,6 @@ const initialAuthState = {
   isAuthenticated: false,
   userId: null,
   email: null,
-  token: null,
   isParent: false,
 }
 
@@ -100,6 +99,8 @@ export const useAppStore = create(
         auth: {
           isAuthenticated: state.auth.isAuthenticated,
           userId: state.auth.userId,
+          email: state.auth.email,
+          token: state.auth.token,
           isParent: state.auth.isParent,
         },
         onboarding: {

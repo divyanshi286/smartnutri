@@ -115,7 +115,7 @@ export const useSearchFoods = (query) =>
   useQuery({
     queryKey: ['foods', 'search', query],
     queryFn: () => searchFoods(query),
-    enabled: query && query.length > 1,
+    enabled: !!(query && query.length > 1),
     staleTime: 5 * 60_000
   })
 

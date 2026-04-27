@@ -52,9 +52,8 @@ export const PAGE_TITLES = {
   privacydoc: 'Safety & Privacy',
 }
 
-export default function AppShell() {
+export default function AppShell({ children }) {
   const { activePage, sidebarOpen } = useAppStore()
-  const PageComponent = PAGE_MAP[activePage] || Dashboard
 
   return (
     <div className={styles.shell}>
@@ -63,7 +62,7 @@ export default function AppShell() {
       <div className={styles.main}>
         <Topbar title={PAGE_TITLES[activePage] || 'Dashboard'}/>
         <main className={styles.content}>
-          <PageComponent key={activePage}/>
+          {children}
         </main>
       </div>
       <VoiceModal />

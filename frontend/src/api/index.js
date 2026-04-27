@@ -3,14 +3,24 @@
  * Real REST API client that calls the SmartNutri backend.
  */
 
+import { useAppStore } from '@store'
+
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001'
 
 async function apiCall(method, path, body = null) {
   const options = {
     method,
     headers: { 'Content-Type': 'application/json' },
-    credentials: 'include',
+    // Remove credentials for wildcard CORS
+    // credentials: 'include',
   }
+
+  // Add authorization token if available
+  const token = useAppStore.getState().auth.token
+  if (token) {
+    options.headers.Authorization = `Bearer ${token}`
+  }
+
   if (body) options.body = JSON.stringify(body)
 
   const res = await fetch(`${API_BASE}${path}`, options)

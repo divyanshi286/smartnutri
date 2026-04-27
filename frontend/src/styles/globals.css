@@ -6,31 +6,31 @@
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
   --ease-smooth: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 
-  /* Adult – Miso Sage */
-  --a1: #3d7a5c; --a2: #2c5a42; --a3: #c8e6d4; --a4: #f2f9f5; --a5: #1a3328;
-  --a-grad: linear-gradient(135deg, #3d7a5c 0%, #2c5a42 100%);
-  --a-mesh: radial-gradient(ellipse at 20% 80%, rgba(61,122,92,.15) 0%, transparent 60%),
-            radial-gradient(ellipse at 80% 20%, rgba(44,90,66,.1) 0%, transparent 60%);
+  /* Professional Grey Palette – Primary */
+  --a1: #5a6b7a; --a2: #3f4a56; --a3: #e8ecf0; --a4: #f5f7fa; --a5: #1a1f28;
+  --a-grad: linear-gradient(135deg, #5a6b7a 0%, #3f4a56 100%);
+  --a-mesh: radial-gradient(ellipse at 20% 80%, rgba(90,107,122,.08) 0%, transparent 60%),
+            radial-gradient(ellipse at 80% 20%, rgba(63,74,86,.06) 0%, transparent 60%);
 
-  /* Teen Boy – Neon Slate */
-  --b1: #0ea5e9; --b2: #0284c7; --b3: #bae6fd; --b4: #f0f9ff; --b5: #0c2d4a;
-  --b-grad: linear-gradient(135deg, #0ea5e9 0%, #6366f1 100%);
-  --b-mesh: radial-gradient(ellipse at 10% 90%, rgba(14,165,233,.18) 0%, transparent 55%),
-            radial-gradient(ellipse at 90% 10%, rgba(99,102,241,.12) 0%, transparent 55%);
+  /* Minimal Slate Variant */
+  --b1: #6b7c8f; --b2: #4a5a6d; --b3: #e5eef5; --b4: #f4f7fa; --b5: #1a2332;
+  --b-grad: linear-gradient(135deg, #6b7c8f 0%, #4a5a6d 100%);
+  --b-mesh: radial-gradient(ellipse at 10% 90%, rgba(107,124,143,.08) 0%, transparent 55%),
+            radial-gradient(ellipse at 90% 10%, rgba(74,90,109,.06) 0%, transparent 55%);
 
-  /* Teen Girl Hormonal – Petal Aurora */
+  /* Cycle Tracker – Petal Aurora (kept original for menstrual) */
   --h1: #e879a0; --h2: #c2185b; --h3: #fce4ec; --h4: #fff5f8; --h5: #4a0e2b;
   --h-grad: linear-gradient(135deg, #e879a0 0%, #9b59b6 100%);
   --h-mesh: radial-gradient(ellipse at 30% 70%, rgba(232,121,160,.2) 0%, transparent 55%),
             radial-gradient(ellipse at 75% 25%, rgba(155,89,182,.15) 0%, transparent 55%);
 
-  /* Teen Girl Athletic – Ember Reef */
+  /* Mood Log – Warm Accent (kept original for mood tracking) */
   --t1: #f97316; --t2: #dc6804; --t3: #fde8d0; --t4: #fff8f2; --t5: #431a07;
   --t-grad: linear-gradient(135deg, #f97316 0%, #e63946 100%);
   --t-mesh: radial-gradient(ellipse at 20% 80%, rgba(249,115,22,.18) 0%, transparent 55%),
             radial-gradient(ellipse at 80% 20%, rgba(230,57,70,.12) 0%, transparent 55%);
 
-  /* Active theme defaults (adult) */
+  /* Active theme defaults (professional grey) */
   --p1: var(--a1); --p2: var(--a2); --p3: var(--a3); --p4: var(--a4); --p5: var(--a5);
   --grad: var(--a-grad); --mesh: var(--a-mesh);
 

@@ -1,26 +1,64 @@
+
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse, Response
+from starlette.middleware.base import BaseHTTPMiddleware
+from slowapi import Limiter
+from slowapi.util import get_remote_address
 import os
 from dotenv import load_dotenv
 
 from app.database import connect_db, close_db, db
-from app.routes import auth_routes, meals_routes, dashboard_routes, chat_routes, food_routes, cycle_routes, progress_routes, voice_routes
+from app.routes import auth_routes, meals_routes, dashboard_routes, chat_routes, food_routes, cycle_routes, progress_routes, voice_routes, nutrition_routes
 from seed_db import seed_database
 
 load_dotenv()
 
+# Create FastAPI app first
 app = FastAPI(title="SmartNutri Backend", version="1.0.0")
 
-# CORS configuration
-FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:5173")
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[FRONTEND_URL, "http://localhost:5173", "http://localhost:3000"],
+    allow_origins=["*"],  # for development only
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Initialize rate limiter
+limiter = Limiter(key_func=get_remote_address)
+app.state.limiter = limiter
+
+# Custom CORS middleware that handles preflight BEFORE routing
+class PreflightCORSMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request: Request, call_next):
+        # Handle preflight OPTIONS requests
+        if request.method == "OPTIONS":
+            return Response(
+                status_code=200,
+                headers={
+                    "Access-Control-Allow-Origin": "http://localhost:5173",
+                    "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+                    "Access-Control-Allow-Headers": "Content-Type, Authorization",
+                    "Access-Control-Allow-Credentials": "true",
+                    "Access-Control-Max-Age": "3600",
+                }
+            )
+        
+        # For other requests, let routing happen
+        response = await call_next(request)
+        
+        # Add CORS headers to all responses
+        response.headers["Access-Control-Allow-Origin"] = "http://localhost:5173"
+        response.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, PATCH, OPTIONS"
+        response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
+        response.headers["Access-Control-Allow-Credentials"] = "true"
+        
+        return response
+
+# Add preflight middleware FIRST (before all others)
+app.add_middleware(PreflightCORSMiddleware)
 
 # Startup and shutdown events
 @app.on_event("startup")
@@ -66,6 +104,12 @@ async def http_exception_handler(request: Request, exc: HTTPException):
                 "message": exc.detail.get("message", str(exc.detail)) if isinstance(exc.detail, dict) else str(exc.detail),
                 "fields": exc.detail.get("fields") if isinstance(exc.detail, dict) else None,
             }
+        },
+        headers={
+            "Access-Control-Allow-Origin": "http://localhost:5173",
+            "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+            "Access-Control-Allow-Headers": "Content-Type, Authorization",
+            "Access-Control-Allow-Credentials": "true",
         }
     )
 
@@ -78,6 +122,7 @@ app.include_router(food_routes.router, tags=["foods"])
 app.include_router(cycle_routes.router, tags=["cycle"])
 app.include_router(progress_routes.router, tags=["progress"])
 app.include_router(voice_routes.router, prefix="/api", tags=["voice"])
+app.include_router(nutrition_routes.router, tags=["nutrition"])
 
 @app.get("/health")
 async def health():

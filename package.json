@@ -1,26 +1,28 @@
 {
-  "name": "smartnutri-web",
+  "name": "smartnutri",
   "private": true,
   "version": "1.0.0",
-  "type": "module",
+  "description": "SmartNutri - AI-powered nutrition and wellness platform",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
+    "frontend:dev": "cd frontend && npm run dev",
+    "frontend:build": "cd frontend && npm run build",
+    "frontend:preview": "cd frontend && npm run preview",
+    "frontend:install": "cd frontend && npm install",
+    "backend:dev": "cd backend && python main.py",
+    "backend:install": "cd backend && pip install -r requirements.txt",
+    "dev": "npm run frontend:dev",
+    "build": "npm run frontend:build"
   },
+  "keywords": [
+    "nutrition",
+    "wellness",
+    "pcos",
+    "ai",
+    "health"
+  ],
+  "author": "SmartNutri Team",
+  "license": "MIT",
   "dependencies": {
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "@tanstack/react-query": "^5.51.0",
-    "@tanstack/react-query-devtools": "^5.51.0",
-    "@tanstack/react-router": "^1.51.0",
-    "zustand": "^4.5.4",
-    "date-fns": "^3.6.0",
-    "react-hook-form": "^7.51.0",
-    "zod": "^3.22.0"
-  },
-  "devDependencies": {
-    "@vitejs/plugin-react": "^4.3.1",
-    "vite": "^5.3.4"
+    "lucide-react": "^1.11.0"
   }
 }

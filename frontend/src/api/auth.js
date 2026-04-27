@@ -2,13 +2,13 @@ const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001'
 
 /**
  * Unified API client with error handling
- * Credentials: 'include' sends httpOnly cookies automatically
+ * Credentials included for httpOnly cookie authentication
  */
 async function apiCall(method, path, body = null) {
   const options = {
     method,
     headers: { 'Content-Type': 'application/json' },
-    credentials: 'include',  // Important: sends httpOnly cookies
+    credentials: 'include',  // Enable cookie-based auth
   }
 
   if (body) {

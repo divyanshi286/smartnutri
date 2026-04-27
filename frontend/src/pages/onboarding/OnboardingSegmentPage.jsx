@@ -1,13 +1,14 @@
 import { useNavigate } from '@tanstack/react-router'
 import { useAppStore } from '@store'
 import { BtnPrimary } from '@ui'
+import { Leaf, Heart, Zap, Dumbbell } from 'lucide-react'
 import styles from './onboarding.module.css'
 
 const SEGMENTS = [
-  { id: 'adult', emoji: '🌿', title: 'Adult (20+)', sub: 'Manage health conditions, weight, energy' },
-  { id: 'teen-girl-h', emoji: '🌸', title: 'Teen — Hormonal Health', sub: 'Cycle tracking, PCOS-aware, hormone balance' },
-  { id: 'teen-girl-a', emoji: '⚡', title: 'Teen — Athletic', sub: 'Performance nutrition, muscle & endurance' },
-  { id: 'teen-boy', emoji: '💪', title: 'Teen Boy', sub: 'Muscle building, sports performance, growth' },
+  { id: 'adult', icon: Leaf, title: 'Adult (20+)', sub: 'Manage health conditions, weight, energy' },
+  { id: 'teen-girl-h', icon: Heart, title: 'Teen — Hormonal Health', sub: 'Cycle tracking, PCOS-aware, hormone balance' },
+  { id: 'teen-girl-a', icon: Zap, title: 'Teen — Athletic', sub: 'Performance nutrition, muscle & endurance' },
+  { id: 'teen-boy', icon: Dumbbell, title: 'Teen Boy', sub: 'Muscle building, sports performance, growth' },
 ]
 
 const SEGMENT_THEME_MAP = {
@@ -38,13 +39,16 @@ export default function OnboardingSegmentPage() {
         </div>
 
         <div className={styles.segmentCards}>
-          {SEGMENTS.map((seg) => (
-            <button key={seg.id} className={styles.segmentCard} onClick={() => handleSelect(seg.id)}>
-              <div className={styles.cardEmoji}>{seg.emoji}</div>
-              <div className={styles.cardTitle}>{seg.title}</div>
-              <div className={styles.cardSub}>{seg.sub}</div>
-            </button>
-          ))}
+          {SEGMENTS.map((seg) => {
+            const IconComponent = seg.icon
+            return (
+              <button key={seg.id} className={styles.segmentCard} onClick={() => handleSelect(seg.id)}>
+                <div className={styles.cardEmoji}><IconComponent size={48} strokeWidth={1.5} /></div>
+                <div className={styles.cardTitle}>{seg.title}</div>
+                <div className={styles.cardSub}>{seg.sub}</div>
+              </button>
+            )
+          })}
         </div>
       </div>
     </div>

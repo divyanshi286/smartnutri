@@ -1,4 +1,13 @@
 import styles from './ui.module.css'
+import { Coffee, Utensils, Moon, Apple, Sparkles, Edit2, Trash2 } from 'lucide-react'
+
+// Meal type to icon mapping
+const MEAL_TYPE_ICONS = {
+  breakfast: Coffee,
+  lunch: Utensils,
+  dinner: Utensils,
+  snack: Apple,
+}
 
 /* ─────────────── CARD ─────────────── */
 export function Card({ children, className = '', style }) {
@@ -112,7 +121,7 @@ export function Chip({ label, type = 'default', onClick }) {
 export function AiNote({ text, chips = [] }) {
   return (
     <div className={styles.aiNote}>
-      <div className={styles.aiPip}>🤖</div>
+      <div className={styles.aiPip}><Sparkles size={20} strokeWidth={1.5} /></div>
       <div className={styles.aiText} dangerouslySetInnerHTML={{ __html: text }}/>
       {chips.length > 0 && (
         <div className={styles.chipSet}>
@@ -124,18 +133,21 @@ export function AiNote({ text, chips = [] }) {
 }
 
 /* ─────────────── MEAL CARD ─────────────── */
-export function MealCard({ emoji, name, type, time, calories, bg, onEdit, onDelete }) {
+export function MealCard({ name, type, time, calories, bg, onEdit, onDelete }) {
+  const IconComponent = MEAL_TYPE_ICONS[type?.toLowerCase()] || Utensils
   return (
     <div className={styles.mealCard}>
-      <div className={styles.mealIco} style={{ background: bg || 'var(--p3)' }}>{emoji}</div>
+      <div className={styles.mealIco} style={{ background: bg || 'var(--p3)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <IconComponent size={24} strokeWidth={1.5} color="white" />
+      </div>
       <div className={styles.mealInfo}>
         <div className={styles.mealName}>{name}</div>
         <div className={styles.mealTime}>{type} · {time}</div>
       </div>
       <div className={styles.mealCal}>{calories}</div>
       <div className={styles.mealActions}>
-        <button className={styles.mealAct} onClick={onEdit}>✏️</button>
-        <button className={styles.mealAct} onClick={onDelete}>🗑</button>
+        <button className={styles.mealAct} onClick={onEdit}><Edit2 size={16} /></button>
+        <button className={styles.mealAct} onClick={onDelete}><Trash2 size={16} /></button>
       </div>
     </div>
   )

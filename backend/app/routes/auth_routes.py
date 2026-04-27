@@ -4,6 +4,8 @@ from datetime import datetime, timedelta
 from typing import Optional
 from bson import ObjectId
 import json
+from slowapi import Limiter
+from slowapi.util import get_remote_address
 
 from app.models import (
     RegisterRequest, LoginRequest, OnboardingRequest,
@@ -20,10 +22,20 @@ from app.utils import (
 from app.database import get_db
 
 router = APIRouter()
+limiter = Limiter(key_func=get_remote_address)
 
 def get_current_user(request):
-    """Extract user from JWT token in cookie"""
-    token = request.cookies.get("sn_token")
+    """Extract user from JWT token in cookie or Authorization header"""
+    # Try to get token from Authorization header first (for non-credential requests)
+    auth_header = request.headers.get("authorization", "")
+    token = None
+    
+    if auth_header.startswith("Bearer "):
+        token = auth_header[7:]  # Remove "Bearer " prefix
+    else:
+        # Fallback to cookie for backward compatibility
+        token = request.cookies.get("sn_token")
+    
     if not token:
         raise HTTPException(status_code=401, detail={"code": "UNAUTHORIZED", "message": "No token provided"})
     
@@ -34,7 +46,8 @@ def get_current_user(request):
     return payload
 
 @router.post("/register")
-async def register(req: RegisterRequest, response: Response):
+@limiter.limit("5/minute")  # 5 registrations per minute per IP
+async def register(request: Request, req: RegisterRequest, response: Response):
     """Register new user"""
     db = get_db()
     
@@ -98,7 +111,8 @@ async def register(req: RegisterRequest, response: Response):
     }
 
 @router.post("/login")
-async def login(req: LoginRequest, response: Response):
+@limiter.limit("10/minute")  # 10 login attempts per minute per IP
+async def login(request: Request, req: LoginRequest, response: Response):
     """Login user"""
     db = get_db()
     
@@ -147,6 +161,7 @@ async def login(req: LoginRequest, response: Response):
             "onboardingComplete": profile.get("onboarding_complete", False) if profile else False,
             "onboardingStep": profile.get("onboarding_step", 0) if profile else 0,
             "theme": get_theme_for_segment(profile.get("segment", "adult") if profile else "adult"),
+            "token": token,
         }
     }
 
@@ -279,7 +294,8 @@ async def get_current_user_profile(request: Request, response: Response):
     }
 
 @router.post("/forgot-password")
-async def forgot_password(req: ForgotPasswordRequest):
+@limiter.limit("3/minute")  # 3 password reset requests per minute per IP
+async def forgot_password(request: Request, req: ForgotPasswordRequest):
     """Request password reset — always return 200"""
     # TODO: Implement email sending
     # For now, just return success

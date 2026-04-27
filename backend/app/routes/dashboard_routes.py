@@ -7,6 +7,7 @@ from datetime import datetime, timedelta
 from bson import ObjectId
 from app.database import get_db
 from app.routes.auth_routes import get_current_user
+from app.json_encoder import to_json_serializable
 
 router = APIRouter()
 
@@ -62,7 +63,7 @@ async def get_dashboard(request: Request):
             "label": a.get("name"),   # Name maps to label in frontend
             "description": a.get("description"),
             "earned": a.get("unlocked", False),  # unlocked maps to earned
-            "earned_at": a.get("earned_at"),
+            "earned_at": to_json_serializable(a.get("earned_at")),
         }
         for a in achievements if a.get("unlocked", False)  # Only show unlocked badges
     ]
@@ -81,7 +82,7 @@ async def get_dashboard(request: Request):
     
     # AI Nudge (placeholder)
     ai_nudge = {
-        "text": f"You're doing great! Keep your protein intake consistent at {targets.get('protein_g', 110)}g daily.",
+        "text": f"You're doing great! Keep your protein intake consistent at {(targets or {}).get('protein_g', 110)}g daily.",
         "chips": ["💪 Protein", "🎯 Consistency"],
     }
     
@@ -107,15 +108,15 @@ async def get_dashboard(request: Request):
             "nutrition": {
                 "calories": {
                     "current": total_calories,
-                    "goal": targets.get("calories", 2000),
+                    "goal": (targets or {}).get("calories", 2000),
                 },
                 "protein": {
                     "current": total_protein,
-                    "goal": targets.get("protein_g", 110),
+                    "goal": (targets or {}).get("protein_g", 110),
                 },
                 "carbs": {
                     "current": total_carbs,
-                    "goal": targets.get("carbs_g", 250),
+                    "goal": (targets or {}).get("carbs_g", 250),
                 },
                 "water": {
                     "current": 1.5,  # Would calculate from logs

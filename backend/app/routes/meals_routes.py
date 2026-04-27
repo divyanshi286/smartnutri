@@ -11,6 +11,7 @@ import json
 from app.models import MealLogRequest, MealLogResponse
 from app.database import get_db
 from app.routes.auth_routes import get_current_user
+from app.json_encoder import to_json_serializable
 
 router = APIRouter()
 
@@ -97,7 +98,7 @@ async def get_meals_by_date(date_str: str, request: Request):
             "calories": meal["total_calories"],
             "time": get_meal_time(meal["meal_type"]),
             "bg": get_meal_color(meal["meal_type"]),
-            "foods": meal["foods"],
+            "foods": to_json_serializable(meal.get("foods", [])),
         })
     
     # Build targets array
