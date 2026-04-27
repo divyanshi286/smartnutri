@@ -124,7 +124,7 @@ def calculate_cycle_phase(last_period_date: str, cycle_length: int = 28) -> dict
             "recommendedActivity": "Moderate activity"
         }
 
-@router.get("/api/cycle")
+@router.get("")
 async def get_cycle_info(request: Request):
     """Get current cycle phase and nutrition recommendations"""
     try:
@@ -195,7 +195,7 @@ async def get_cycle_info(request: Request):
             detail={"code": "CYCLE_ERROR", "message": "Failed to fetch cycle info"}
         )
 
-@router.put("/api/cycle/update")
+@router.put("/update")
 async def update_cycle_data(cycle_data: CycleDataSchema, request: Request):
     """Update cycle tracking data"""
     try:
@@ -243,7 +243,7 @@ async def update_cycle_data(cycle_data: CycleDataSchema, request: Request):
             detail={"code": "UPDATE_ERROR", "message": str(e)}
         )
 
-@router.post("/api/cycle/mood")
+@router.post("/mood")
 async def log_mood(request: Request, mood: Optional[str] = None, symptom: Optional[str] = None, notes: Optional[str] = None):
     """Log mood and symptoms for cycle tracking"""
     try:
@@ -298,7 +298,7 @@ async def log_mood(request: Request, mood: Optional[str] = None, symptom: Option
             detail={"code": "MOOD_ERROR", "message": str(e)}
         )
 
-@router.get("/api/cycle/predictions")
+@router.get("/predictions")
 async def get_cycle_predictions(request: Request, days_ahead: int = 30):
     """Get predictions for upcoming cycle phases"""
     try:
@@ -365,7 +365,7 @@ async def get_cycle_predictions(request: Request, days_ahead: int = 30):
             detail={"code": "PREDICTION_ERROR", "message": error_msg}
         )
 
-@router.get("/api/cycle/stats")
+@router.get("/stats")
 async def get_cycle_stats(request: Request, days: int = 90):
     """Get cycle statistics and patterns"""
     try:

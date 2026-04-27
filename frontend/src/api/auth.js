@@ -5,10 +5,20 @@ const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001'
  * Credentials included for httpOnly cookie authentication
  */
 async function apiCall(method, path, body = null) {
+  const token = localStorage.getItem("token")
+
+  const headers = {
+    'Content-Type': 'application/json',
+  }
+
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`
+  }
+
   const options = {
     method,
-    headers: { 'Content-Type': 'application/json' },
-    credentials: 'include',  // Enable cookie-based auth
+    headers,
+    credentials: 'include', // Enable credentials for CORS
   }
 
   if (body) {
@@ -16,11 +26,16 @@ async function apiCall(method, path, body = null) {
   }
 
   const res = await fetch(`${API_BASE}${path}`, options)
-  const json = await res.json()
+
+  let json = {}
+  try {
+    json = await res.json()
+  } catch {
+    throw { message: "Invalid backend response" }
+  }
 
   if (!res.ok) {
-    const error = json.error || { code: 'UNKNOWN_ERROR', message: res.statusText }
-    throw error
+    throw json.error || { message: res.statusText }
   }
 
   return json.data
@@ -40,8 +55,12 @@ export const authApi = {
 
   // POST /api/auth/login
   login: async (email, password, rememberMe = false) => {
-    return apiCall('POST', '/api/auth/login', { email, password, rememberMe })
-  },
+  const data = await apiCall('POST', '/api/auth/login', { email, password, rememberMe })
+
+  localStorage.setItem("token", data.token)   // 
+
+  return data
+},
 
   // POST /api/auth/logout
   logout: async () => {

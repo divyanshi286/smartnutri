@@ -11,7 +11,7 @@ from app.json_encoder import to_json_serializable
 
 router = APIRouter()
 
-@router.get("/api/dashboard")
+@router.get("/dashboard")
 async def get_dashboard(request: Request):
     """Get complete dashboard data for home page"""
     user = get_current_user(request)
@@ -129,7 +129,7 @@ async def get_dashboard(request: Request):
         }
     }
 
-@router.get("/api/progress/summary")
+@router.get("/progress/summary")
 async def get_progress_summary(request: Request, days: int = 7):
     """Get progress summary for the last N days"""
     user = get_current_user(request)

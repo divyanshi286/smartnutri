@@ -15,7 +15,7 @@ from app.json_encoder import to_json_serializable
 
 router = APIRouter()
 
-@router.post("/api/meals/log")
+@router.post("/meals/log")
 async def log_meal(req: MealLogRequest, request: Request):
     """Log a meal for the user"""
     user = get_current_user(request)
@@ -58,7 +58,7 @@ async def log_meal(req: MealLogRequest, request: Request):
         }
     }
 
-@router.get("/api/meals/date/{date_str}")
+@router.get("/meals/date/{date_str}")
 async def get_meals_by_date(date_str: str, request: Request):
     """Get all meals for a specific date (format: YYYY-MM-DD)"""
     user = get_current_user(request)
@@ -151,7 +151,7 @@ async def get_meals_by_date(date_str: str, request: Request):
         }
     }
 
-@router.get("/api/meals/week")
+@router.get("/meals/week")
 async def get_weekly_meals(request: Request):
     """Get meals summary for the last 7 days"""
     user = get_current_user(request)
@@ -173,22 +173,19 @@ async def get_weekly_meals(request: Request):
         if date not in meals_by_date:
             meals_by_date[date] = {
                 "date": date,
-                "calories": 0,
+                "totalCalories": 0,
                 "protein": 0,
                 "count": 0,
             }
-        meals_by_date[date]["calories"] += meal["total_calories"]
+        meals_by_date[date]["totalCalories"] += meal["total_calories"]
         meals_by_date[date]["protein"] += meal["total_protein_g"]
         meals_by_date[date]["count"] += 1
-    
-    # Convert to list and sort
-    daily_data = sorted(meals_by_date.values(), key=lambda x: x["date"])
     
     return {
         "success": True,
         "data": {
             "period": "7_days",
-            "daily": daily_data,
+            "daily": meals_by_date,
             "totalMeals": len(meals),
         }
     }
@@ -217,7 +214,7 @@ async def delete_meal(meal_id: str, request: Request):
         "data": {"message": "Meal deleted"}
     }
 
-@router.get("/api/nutrition/today")
+@router.get("/nutrition/today")
 async def get_today_nutrition(request: Request):
     """Get today's nutrition summary"""
     user = get_current_user(request)

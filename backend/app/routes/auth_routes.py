@@ -268,8 +268,10 @@ async def logout(response: Response):
 async def get_current_user_profile(request: Request, response: Response):
     """Get current user profile — called on app startup"""
     user_payload = get_current_user(request)
+
+    print("PAYLOAD FROM TOKEN:", user_payload)
+
     user_id = user_payload["userId"]
-    
     db = get_db()
     
     user = await db.users.find_one({"_id": ObjectId(user_id)})
@@ -278,6 +280,12 @@ async def get_current_user_profile(request: Request, response: Response):
     
     profile = await db.profiles.find_one({"user_id": user_id})
     nutrition = await db.nutrition_targets.find_one({"user_id": user_id})
+    
+    # Convert ObjectId to string for JSON serialization
+    if profile and "_id" in profile:
+        profile["_id"] = str(profile["_id"])
+    if nutrition and "_id" in nutrition:
+        nutrition["_id"] = str(nutrition["_id"])
     
     return {
         "success": True,

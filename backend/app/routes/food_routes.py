@@ -73,7 +73,7 @@ DEFAULT_FOODS = [
     {"name": "Chikhalwali", "category": "snacks", "calories": 380, "protein": 12, "carbs": 45, "fats": 16, "fiber": 3},
 ]
 
-@router.get("/api/foods/search")
+@router.get("/foods/search")
 async def search_foods(q: str = Query(..., min_length=1), category: Optional[str] = None, limit: int = 10):
     """
     Search for foods by name.
@@ -117,7 +117,7 @@ async def search_foods(q: str = Query(..., min_length=1), category: Optional[str
         "data": results
     }
 
-@router.get("/api/foods/categories")
+@router.get("/foods/categories")
 async def get_food_categories():
     """Get all available food categories"""
     categories = [
@@ -133,7 +133,7 @@ async def get_food_categories():
     ]
     return {"success": True, "data": categories}
 
-@router.get("/api/foods/browse")
+@router.get("/foods/browse")
 async def browse_foods(category: Optional[str] = None, limit: int = 20):
     """Browse foods by category"""
     db = get_db()
@@ -162,7 +162,7 @@ async def browse_foods(category: Optional[str] = None, limit: int = 20):
         "data": results
     }
 
-@router.get("/api/foods/{food_id}")
+@router.get("/foods/{food_id}")
 async def get_food_details(food_id: str):
     """Get detailed nutrition info for a food"""
     try:
@@ -189,7 +189,7 @@ async def get_food_details(food_id: str):
     except Exception as e:
         raise HTTPException(status_code=400, detail={"code": "INVALID_ID", "message": str(e)})
 
-@router.post("/api/foods/favorite")
+@router.post("/foods/favorite")
 async def add_favorite_food(request: Request, food_id: str):
     """Add a food to user's favorites"""
     user = get_current_user(request)
@@ -210,7 +210,7 @@ async def add_favorite_food(request: Request, food_id: str):
     except Exception as e:
         raise HTTPException(status_code=500, detail={"code": "ERROR", "message": str(e)})
 
-@router.get("/api/foods/favorites")
+@router.get("/foods/favorites")
 async def get_favorite_foods(request: Request):
     """Get user's favorite foods for quick access"""
     user = get_current_user(request)

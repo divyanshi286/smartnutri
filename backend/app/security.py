@@ -38,9 +38,8 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None, r
     if expires_delta:
         expire = datetime.utcnow() + expires_delta
     else:
-        # 7 days if remember_me, else 30 days
-        days = 7 if remember_me else 30
-        expire = datetime.utcnow() + timedelta(days=days)
+        # 7 days standard expiry for health data security
+        expire = datetime.utcnow() + timedelta(days=7)
     
     to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)

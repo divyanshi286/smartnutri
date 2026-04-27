@@ -13,7 +13,7 @@ from app.routes.auth_routes import get_current_user
 
 router = APIRouter()
 
-@router.post("/api/progress/log")
+@router.post("/log")
 async def log_progress(req: ProgressLogRequest, request: Request):
     """Log daily progress (weight, mood, exercise, water, etc.)"""
     try:
@@ -75,7 +75,7 @@ async def log_progress(req: ProgressLogRequest, request: Request):
             detail={"code": "PROGRESS_ERROR", "message": str(e)}
         )
 
-@router.get("/api/progress/summary")
+@router.get("/summary")
 async def get_progress_summary(request: Request, days: int = 7):
     """Get progress data for the specified period"""
     try:
@@ -158,7 +158,7 @@ async def get_progress_summary(request: Request, days: int = 7):
             detail={"code": "SUMMARY_ERROR", "message": str(e)}
         )
 
-@router.get("/api/progress/streak")
+@router.get("/streak")
 async def get_streak(request: Request):
     """Get current logging streak"""
     try:
@@ -237,7 +237,7 @@ async def get_streak(request: Request):
             detail={"code": "STREAK_ERROR", "message": str(e)}
         )
 
-@router.get("/api/progress/goals")
+@router.get("/goals")
 async def check_goals(request: Request):
     """Check progress towards nutrition and fitness goals"""
     try:
@@ -316,7 +316,7 @@ async def check_goals(request: Request):
             detail={"code": "GOALS_ERROR", "message": str(e)}
         )
 
-@router.get("/api/progress/achievements")
+@router.get("/achievements")
 async def get_achievements(request: Request):
     """Get user achievements and badges"""
     try:

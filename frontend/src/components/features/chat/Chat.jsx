@@ -29,7 +29,7 @@ export default function Chat() {
       {/* Suggestions sidebar */}
       <div className={styles.chatSidebar}>
         <div className={styles.sidebarHd}>
-          <div style={{ fontWeight: 700, fontSize: 14 }}>💡 Suggested Questions</div>
+          <div style={{ fontWeight: 700, fontSize: 14 }}>Suggested Questions</div>
           <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 3 }}>Personalized for PCOS</div>
         </div>
         <div className={styles.suggList}>
@@ -51,11 +51,11 @@ export default function Chat() {
       <div className={styles.chatMain}>
         {/* Header */}
         <div className={styles.chatHead}>
-          <div className={styles.chatAvatar}>🤖</div>
+          <div className={styles.chatAvatar}>💡</div>
           <div>
-            <div style={{ fontFamily: 'var(--ff-display)', fontWeight: 700, fontSize: 16 }}>NutriAI Coach</div>
+            <div style={{ fontFamily: 'var(--ff-display)', fontWeight: 700, fontSize: 16 }}>Smart Suggestions</div>
             <div style={{ fontSize: 12, color: 'var(--p1)', fontWeight: 700 }}>
-              ● Online · {user?.conditions?.length ? `Personalized for ${user.conditions.join(', ')}` : 'Personalized AI support'}
+              ● Online · {user?.conditions?.length ? `Personalized for ${user.conditions.join(', ')}` : 'Personalized support'}
             </div>
           </div>
           <div style={{ marginLeft: 'auto', display: 'flex', gap: 8 }}>
@@ -68,7 +68,7 @@ export default function Chat() {
         <div className={styles.history} ref={historyRef}>
           {messages.map((msg) => (
             <div key={msg.id} className={msg.role === 'user' ? styles.bubbleUser : styles.bubbleAi}>
-              {msg.role === 'ai' && <div className={styles.aiBubbleAvatar}>🤖</div>}
+              {msg.role === 'ai' && <div className={styles.aiBubbleAvatar}>💡</div>}
               <div>
                 <div className={`${styles.bubbleBody} ${msg.role === 'user' ? styles.userBody : styles.aiBody}`}>
                   <span dangerouslySetInnerHTML={{ __html: msg.content }}/>
@@ -84,7 +84,7 @@ export default function Chat() {
           ))}
           {isPending && (
             <div className={styles.bubbleAi}>
-              <div className={styles.aiBubbleAvatar}>🤖</div>
+              <div className={styles.aiBubbleAvatar}>💡</div>
               <div className={`${styles.bubbleBody} ${styles.aiBody}`} style={{ color: 'var(--muted)' }}>
                 Thinking…
               </div>

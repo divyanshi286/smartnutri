@@ -18,7 +18,7 @@ export default function RootLayout() {
     queryFn: authApi.getMe,
     retry: false,
     staleTime: 5 * 60_000, // Cache for 5 minutes
-    enabled: !authCheckAttempted, // Run once on startup
+    enabled: !!localStorage.getItem("token"), // Run once on startup
   })
 
   // Hydrate store when auth data loads
@@ -62,7 +62,7 @@ export default function RootLayout() {
     if (isLoading) return
 
     // If auth check failed and not on public route, redirect to login
-    if (error && !isPublicRoute) {
+    if (error && !isPublicRoute && localStorage.getItem("token")) {
       setAuth({ isAuthenticated: false, userId: null, email: null })
       navigate({ to: '/auth/login' })
       return

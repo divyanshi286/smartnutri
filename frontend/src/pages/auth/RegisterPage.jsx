@@ -84,6 +84,10 @@ export default function RegisterPage() {
           <p>Join SmartNutri for personalized nutrition</p>
         </div>
 
+        <div style={{ background: '#dbeafe', border: '1px solid #93c5fd', borderRadius: 8, padding: '12px 16px', marginBottom: 20, fontSize: 13, color: '#1e40af', lineHeight: 1.5 }}>
+          📧 After registration, we'll send a verification link to your email. Check your inbox to confirm your account.
+        </div>
+
         <form onSubmit={handleSubmit} className={styles.authForm}>
           {fieldErrors.form && <div className={styles.errorBanner}>{fieldErrors.form}</div>}
 

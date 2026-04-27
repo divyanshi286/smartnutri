@@ -11,8 +11,7 @@ async function apiCall(method, path, body = null) {
   const options = {
     method,
     headers: { 'Content-Type': 'application/json' },
-    // Remove credentials for wildcard CORS
-    // credentials: 'include',
+    credentials: 'include', // Enable for CORS with proper headers
   }
 
   // Add authorization token if available
@@ -154,7 +153,7 @@ export const fetchProgress = async () => {
     
     // Transform badges
     const badges = (achievements.achievements || []).map((a, idx) => ({
-      id: a.badge_id || idx,
+      id: a.id || idx,
       emoji: a.icon || '🏆',
       label: a.name || 'Badge',
       earned: a.unlocked || false,

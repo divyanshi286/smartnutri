@@ -81,10 +81,10 @@ export default function Meals() {
             <CardHeader title="📱 Input Methods"/>
             <CardBody>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
-                <BtnSecondary style={{ justifyContent: 'center' }}>📷 Camera Scan</BtnSecondary>
-                <BtnSecondary style={{ justifyContent: 'center' }}>🎙 Voice Log</BtnSecondary>
+                <BtnSecondary style={{ justifyContent: 'center', opacity: 0.5, cursor: 'not-allowed' }} disabled>📷 Camera Scan</BtnSecondary>
+                <BtnSecondary style={{ justifyContent: 'center', opacity: 0.5, cursor: 'not-allowed' }} disabled>🎙 Voice Log</BtnSecondary>
                 <BtnSecondary style={{ justifyContent: 'center' }} onClick={() => setShowFoodSearch(true)}>🔍 Search Food</BtnSecondary>
-                <BtnSecondary style={{ justifyContent: 'center' }}>🏷 Barcode</BtnSecondary>
+                <BtnSecondary style={{ justifyContent: 'center', opacity: 0.5, cursor: 'not-allowed' }} disabled>🏷 Barcode</BtnSecondary>
               </div>
             </CardBody>
           </Card>

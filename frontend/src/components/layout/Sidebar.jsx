@@ -7,7 +7,7 @@ import styles from './Sidebar.module.css'
 const NAV = [
   { section: 'Main' },
   { id: 'dashboard',  ico: '■', label: 'Dashboard'    },
-  { id: 'chat',       ico: '◆', label: 'AI Coach'      },
+  { id: 'chat',       ico: '◆', label: 'Smart Suggestions' },
   { id: 'meals',      ico: '●', label: 'Meal Log'      },
   { id: 'progress',   ico: '▲', label: 'Progress'      },
   { id: 'nutrition',  ico: '○', label: 'Nutrition'     },

@@ -251,3 +251,17 @@ async def get_food_info(food_name: str):
         "carbs": food_info["carbs"],
         "fat": food_info["fat"]
     }
+
+
+@router.get("/examples")
+async def get_voice_examples():
+    """
+    Get example voice commands for the user.
+    """
+    return [
+        "Log dal rice for lunch",
+        "How much protein do I have today?",
+        "Add 2 glasses of water",
+        "What foods help with my health goals?",
+        "Show my weekly progress",
+    ]

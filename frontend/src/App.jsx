@@ -6,9 +6,12 @@ export default function App() {
   const { theme, dark } = useAppStore()
 
   useEffect(() => {
-    const body = document.body
-    body.className = [theme, dark ? 'dark' : ''].filter(Boolean).join(' ')
-  }, [theme, dark])
+  const token = localStorage.getItem("token")
+
+  if (!token) return
+
+  authApi.getMe()
+  }, [])
 
   return <AppShell />
 }
