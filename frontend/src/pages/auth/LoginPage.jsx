@@ -66,15 +66,14 @@ export default function LoginPage() {
         email: data.email,
       })
 
-      setTimeout(() => {
-        if (data.onboardingComplete) {
-          completeOnboarding()
-          navigate({ to: '/dashboard' })
-        } else {
-          setOnboardingStep(data.onboardingStep || 1)
-          navigate({ to: '/onboarding/segment' })
-        }
-      }, 500)
+      // Immediately redirect (don't wait) - let onboarding guard handle routing
+      if (data.onboardingComplete) {
+        completeOnboarding()
+        navigate({ to: '/dashboard' })
+      } else {
+        setOnboardingStep(data.onboardingStep || 1)
+        navigate({ to: '/onboarding/segment' })
+      }
     },
     onError: (error) => {
       setFieldErrors({ form: error.message || 'Login failed. Please try again.' })

@@ -13,12 +13,13 @@ export default function RootLayout() {
 
   // Fetch current user on app startup (always try, even if not authenticated)
   // This allows cookie-based auth to work on page refresh
-  const { data: authData, isLoading, error } = useQuery({
+  const { data: authData, isLoading, error, refetch } = useQuery({
     queryKey: ['auth', 'me'],
     queryFn: authApi.getMe,
     retry: false,
     staleTime: 5 * 60_000, // Cache for 5 minutes
     enabled: !!localStorage.getItem("token"), // Run once on startup
+    refetchOnWindowFocus: false,
   })
 
   // Hydrate store when auth data loads
@@ -40,7 +41,7 @@ export default function RootLayout() {
         setTheme(authData.theme)
       }
       
-      if (authData.onboardingComplete !== onboarding.complete) {
+      if (authData.onboardingComplete && !onboarding.complete) {
         completeOnboarding()
       }
     }
@@ -57,13 +58,17 @@ export default function RootLayout() {
     const publicRoutes = ['/auth/login', '/auth/register', '/health']
     const isPublicRoute = publicRoutes.some(route => location.pathname.startsWith(route))
 
-    // With cookie-based auth, we rely on the query result
-    // Loading state: wait for auth check to complete
-    if (isLoading) return
+    // If on public route, no need to check auth
+    if (isPublicRoute) return
 
-    // If auth check failed and not on public route, redirect to login
-    if (error && !isPublicRoute && localStorage.getItem("token")) {
-      setAuth({ isAuthenticated: false, userId: null, email: null })
+    // If still loading auth and user set isAuthenticated in store, allow the navigation
+    if (isLoading && auth.isAuthenticated) return
+
+    // If auth check failed (error) but user manually set isAuthenticated, trust it
+    if (error && auth.isAuthenticated && localStorage.getItem("token")) return
+
+    // If auth check failed and user is not on public route, redirect to login
+    if (error && !auth.isAuthenticated && !isPublicRoute) {
       navigate({ to: '/auth/login' })
       return
     }
