@@ -18,7 +18,7 @@ export default function RootLayout() {
     queryFn: authApi.getMe,
     retry: false,
     staleTime: 5 * 60_000, // Cache for 5 minutes
-    enabled: !!localStorage.getItem("token"), // Run once on startup
+    enabled: true, // Always enabled - backend authenticates via httpOnly cookie
     refetchOnWindowFocus: false,
   })
 
@@ -65,7 +65,7 @@ export default function RootLayout() {
     if (isLoading && auth.isAuthenticated) return
 
     // If auth check failed (error) but user manually set isAuthenticated, trust it
-    if (error && auth.isAuthenticated && localStorage.getItem("token")) return
+    if (error && auth.isAuthenticated) return
 
     // If auth check failed and user is not on public route, redirect to login
     if (error && !auth.isAuthenticated && !isPublicRoute) {

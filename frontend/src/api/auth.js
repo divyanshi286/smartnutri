@@ -1,18 +1,12 @@
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001'
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000'
 
 /**
  * Unified API client with error handling
  * Credentials included for httpOnly cookie authentication
  */
 async function apiCall(method, path, body = null) {
-  const token = localStorage.getItem("token")
-
   const headers = {
     'Content-Type': 'application/json',
-  }
-
-  if (token) {
-    headers['Authorization'] = `Bearer ${token}`
   }
 
   const options = {
@@ -55,12 +49,8 @@ export const authApi = {
 
   // POST /api/auth/login
   login: async (email, password, rememberMe = false) => {
-  const data = await apiCall('POST', '/api/auth/login', { email, password, rememberMe })
-
-  localStorage.setItem("token", data.token)   // 
-
-  return data
-},
+    return apiCall('POST', '/api/auth/login', { email, password, rememberMe })
+  },
 
   // POST /api/auth/logout
   logout: async () => {

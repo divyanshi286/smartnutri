@@ -20,6 +20,8 @@ import {
   getCyclePredictions,
   getCycleStats,
   logProgress,
+  logMeal,
+  apiCall,
 } from '@api'
 
 /* ── Query Keys ── */
@@ -107,6 +109,24 @@ export const useLogProgress = () => {
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: KEYS.progress })
     },
+  })
+}
+
+/* ── Meal Mutations ── */
+export const useLogMeal = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: ({ mealType, food, quantity = 1 }) => logMeal(mealType, food, quantity),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: KEYS.meals }),
+    onError: (error) => console.error('Meal log failed:', error)
+  })
+}
+
+export const useDeleteMeal = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (mealId) => apiCall('DELETE', `/api/meals/${mealId}`),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: KEYS.meals })
   })
 }
 

@@ -285,44 +285,36 @@ async def get_chat_suggestions(request: Request):
         user_id = user_payload.get("userId")  # Token uses camelCase
         
         db = get_db()
-        user_profile = await db.profiles.find_one({"user_id": user_id})
+        profile = await db.profiles.find_one({"user_id": user_id})
         
-        if not user_profile:
-            # Default suggestions
-            return {
-                "data": [
-                    {"label": "💪 Best foods for my goal?", "msg": "What are the best foods for my goal?"},
-                    {"label": "🥗 Meal ideas?", "msg": "What meals should I eat today?"},
-                    {"label": "⚡ Pre-workout snacks?", "msg": "What's a good pre-workout snack?"},
-                ]
-            }
-        
-        # Generate segment-specific suggestions
-        segment = user_profile.get("segment", "adult")
-        conditions = user_profile.get("conditions", [])
-        goal = user_profile.get("primaryGoal", "general health")
-        
-        base_suggestions = [
-            {"label": f"💪 Best foods for {goal}?", "msg": f"What are the best foods for {goal}?"},
-            {"label": "🥗 Meal ideas?", "msg": "What meals should I eat today?"},
-            {"label": "⚡ Pre-workout snacks?", "msg": "What's a good pre-workout snack?"},
+        # Base suggestions for all users
+        base = [
+            "What should I eat for breakfast?",
+            "How many calories should I eat?",
+            "What foods help with energy?"
         ]
         
-        # Add condition-specific suggestions
-        if "PCOS" in [c.upper() for c in conditions]:
-            base_suggestions.append({"label": "🩺 PCOS-friendly foods?", "msg": "What are good PCOS-friendly foods?"})
+        # Add segment and condition-specific suggestions
+        if profile:
+            segment = profile.get("segment", "")
+            conditions = profile.get("conditions", [])
+            goals = profile.get("goals", [])
+            
+            if "teen-girl-h" in segment or "teen-girl-a" in segment or "pcos" in [c.lower() for c in conditions]:
+                base.append("What foods help with PCOS?")
+            
+            if "athlete" in segment or "athletic" in [g.lower() for g in goals]:
+                base.append("Best foods for muscle recovery?")
         
-        if segment.startswith("teen-girl"):
-            base_suggestions.append({"label": "🌸 Cycle syncing nutrition?", "msg": "How do I sync my nutrition with my cycle?"})
-        
-        if segment == "teen-girl-a" or "athletic" in goal.lower():
-            base_suggestions.append({"label": "💪 Athletic nutrition?", "msg": "Nutrition tips for athletes?"})
-        
-        return {"data": base_suggestions[:3]}  # Return top 3
+        return {"success": True, "data": base}
     
     except Exception as e:
         print(f"Suggestions error: {e}")
-        return {"data": []}
+        return {"success": True, "data": [
+            "What should I eat for breakfast?",
+            "How many calories should I eat?",
+            "What foods help with energy?"
+        ]}
 
 @router.get("/history")
 async def get_chat_history(request: Request, limit: int = 50):

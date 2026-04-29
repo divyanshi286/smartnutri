@@ -1,11 +1,15 @@
 import { useState } from 'react'
-import { useCycle } from '@hooks/useQueries'
+import { useQueryClient } from '@tanstack/react-query'
+import { useCycle, useLogCycleMood, KEYS } from '@hooks/useQueries'
 import { Card, CardHeader, CardBody, Skeleton } from '@ui'
 import styles from './Cycle.module.css'
 
 export default function Cycle() {
+  const queryClient = useQueryClient()
   const { data, isLoading } = useCycle()
   const [mood, setMood] = useState(null)
+  const { mutate: logMood } = useLogCycleMood()
+  const [selectedSymptom] = useState(null)
 
   return (
     <div className={styles.wrap}>
@@ -71,7 +75,12 @@ export default function Cycle() {
             <CardBody>
               <div style={{ display: 'flex', gap: 10, marginBottom: 16 }}>
                 {['😊','😴','😤','🤢'].map((m) => (
-                  <button key={m} onClick={() => setMood(m)} style={{ flex: 1, padding: 14, borderRadius: 14, border: `2px solid ${mood===m?'var(--p1)':'var(--border)'}`, background: mood===m?'color-mix(in srgb,var(--p1) 10%,var(--card))':'var(--card)', cursor: 'pointer', fontSize: 26, transition: '.15s' }}>
+                  <button key={m} onClick={() => {
+                    setMood(m)
+                    logMood({ mood: m, symptom: selectedSymptom }, {
+                      onSuccess: () => queryClient.invalidateQueries({ queryKey: KEYS.cycle })
+                    })
+                  }} style={{ flex: 1, padding: 14, borderRadius: 14, border: `2px solid ${mood===m?'var(--p1)':'var(--border)'}`, background: mood===m?'color-mix(in srgb,var(--p1) 10%,var(--card))':'var(--card)', cursor: 'pointer', fontSize: 26, transition: '.15s' }}>
                     {m}
                   </button>
                 ))}

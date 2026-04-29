@@ -133,7 +133,7 @@ export function AiNote({ text, chips = [] }) {
 }
 
 /* ─────────────── MEAL CARD ─────────────── */
-export function MealCard({ name, type, time, calories, bg, onEdit, onDelete }) {
+export function MealCard({ id, name, type, time, calories, bg, onEdit, onDelete }) {
   const IconComponent = MEAL_TYPE_ICONS[type?.toLowerCase()] || Utensils
   return (
     <div className={styles.mealCard}>
@@ -147,7 +147,7 @@ export function MealCard({ name, type, time, calories, bg, onEdit, onDelete }) {
       <div className={styles.mealCal}>{calories}</div>
       <div className={styles.mealActions}>
         <button className={styles.mealAct} onClick={onEdit}><Edit2 size={16} /></button>
-        <button className={styles.mealAct} onClick={onDelete}><Trash2 size={16} /></button>
+        <button className={styles.mealAct} onClick={onDelete} style={{ color: '#e11d48' }}><Trash2 size={16} /></button>
       </div>
     </div>
   )

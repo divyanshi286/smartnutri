@@ -71,14 +71,19 @@ async def get_dashboard(request: Request):
     # Get cycle summary if applicable
     cycle_summary = None
     if profile and profile.get("segment") in ["teen-girl-h", "teen-girl-a"]:
-        # Simple cycle phase calculation (would be more complex in production)
-        cycle_data = profile.get("cycle_data", {})
-        cycle_summary = {
-            "phase": "luteal",
-            "label": "Focus on magnesium & iron intake",
-            "daysLeft": 7,
-            "recommendations": ["Increase magnesium intake", "Great time for strength training"],
-        }
+        if profile and profile.get("cycle_data"):
+            from app.routes.cycle_routes import calculate_cycle_phase
+            phase_info = calculate_cycle_phase(
+                profile["cycle_data"].get("lastPeriodDate", "2024-01-01"),
+                profile["cycle_data"].get("cycleLength", 28)
+            )
+            cycle_summary = {
+                "phase": phase_info["phase"],
+                "label": phase_info["label"],
+                "emoji": phase_info["emoji"]
+            }
+        else:
+            cycle_summary = { "phase": "not_started", "label": "Not Started", "emoji": "⚪" }
     
     # AI Nudge (placeholder)
     ai_nudge = {

@@ -8,7 +8,7 @@ import os
 from dotenv import load_dotenv
 
 from app.database import connect_db, close_db, db
-from app.routes import auth_routes, meals_routes, dashboard_routes, chat_routes, food_routes, cycle_routes, progress_routes, voice_routes, nutrition_routes
+from app.routes import auth_routes, meals_routes, dashboard_routes, chat_routes, food_routes, cycle_routes, progress_routes, voice_routes, nutrition_routes, education_routes, parent_routes
 from seed_db import seed_database
 
 load_dotenv()
@@ -18,7 +18,7 @@ app = FastAPI(title="SmartNutri Backend", version="1.0.0")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://localhost:5174"],
+    allow_origins=["http://localhost:5173"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -127,6 +127,8 @@ app.include_router(cycle_routes.router, prefix="/api/cycle", tags=["cycle"])
 app.include_router(progress_routes.router, prefix="/api/progress", tags=["progress"])
 app.include_router(voice_routes.router, prefix="/api/voice", tags=["voice"])
 app.include_router(nutrition_routes.router, prefix="/api", tags=["nutrition"])
+app.include_router(education_routes.router, prefix="/api", tags=["education"])
+app.include_router(parent_routes.router, prefix="/api", tags=["parent"])
 
 # Health check endpoint
 @app.get("/health")

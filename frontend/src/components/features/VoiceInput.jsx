@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useVoiceInput } from '../../hooks/useVoiceInput';
+import { useLogMeal } from '../../hooks/useQueries';
 import { logMealWithVoice } from '../../api/voice';
 import styles from './VoiceInput.module.css';
 
@@ -28,6 +29,7 @@ export const VoiceInput = ({ onMealLogged, mealDate = null, onTranscriptChange =
   const [isProcessing, setIsProcessing] = useState(false);
   const [systemMessage, setSystemMessage] = useState('');
   const [recordingTime, setRecordingTime] = useState(0);
+  const { mutate: logMeal } = useLogMeal();
 
   // Track recording time
   useEffect(() => {
@@ -60,6 +62,35 @@ export const VoiceInput = ({ onMealLogged, mealDate = null, onTranscriptChange =
     startListening();
   };
 
+  const handleVoiceSubmit = async (voiceTranscript) => {
+    try {
+      const result = await logMealWithVoice(
+        voiceTranscript,
+        mealDate || new Date().toISOString(),
+        confidence
+      );
+
+      // Use React Query mutation for cache invalidation
+      logMeal(
+        { mealType: 'voice', food: result },
+        {
+          onSuccess: () => {
+            setSystemMessage(`✅ Added: ${result.foodName || result.name} (~${result.calories} cal)`);
+            resetTranscript();
+            if (onMealLogged) {
+              onMealLogged(result);
+            }
+          },
+          onError: (error) => {
+            setSystemMessage(`❌ Error: ${error.message}`);
+          }
+        }
+      );
+    } catch (err) {
+      setSystemMessage(`❌ Error: ${err.message}`);
+    }
+  };
+
   const handleStopRecording = async () => {
     stopListening();
 
@@ -74,20 +105,7 @@ export const VoiceInput = ({ onMealLogged, mealDate = null, onTranscriptChange =
     setSystemMessage('🔄 Processing your meal description...');
 
     try {
-      const result = await logMealWithVoice(
-        fullTranscript,
-        mealDate || new Date().toISOString(),
-        confidence
-      );
-
-      setSystemMessage(`✅ "${result.foodName}" logged! ~${result.calories} cal`);
-      resetTranscript();
-
-      if (onMealLogged) {
-        onMealLogged(result);
-      }
-    } catch (err) {
-      setSystemMessage(`❌ Error: ${err.message}`);
+      await handleVoiceSubmit(fullTranscript);
     } finally {
       setIsProcessing(false);
     }

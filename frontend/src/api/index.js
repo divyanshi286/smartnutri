@@ -7,7 +7,7 @@ import { useAppStore } from '@store'
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001'
 
-async function apiCall(method, path, body = null) {
+export async function apiCall(method, path, body = null) {
   const options = {
     method,
     headers: { 'Content-Type': 'application/json' },

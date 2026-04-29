@@ -1,12 +1,9 @@
 import { useState } from 'react'
-import { useQueryClient } from '@tanstack/react-query'
-import { useMeals, useSearchFoods, useFoodCategories } from '@hooks/useQueries'
+import { useMeals, useSearchFoods, useFoodCategories, useLogMeal, useDeleteMeal } from '@hooks/useQueries'
 import { Card, CardHeader, CardBody, MealCard, ProgressBar, BtnPrimary, BtnSecondary, Skeleton } from '@ui'
-import { logMeal } from '@api'
 import styles from './Meals.module.css'
 
 export default function Meals() {
-  const queryClient = useQueryClient()
   const today = new Date().toISOString().split('T')[0]
   const { data, isLoading } = useMeals(today)
   const [searchQuery, setSearchQuery] = useState('')
@@ -14,29 +11,24 @@ export default function Meals() {
   const [showFoodSearch, setShowFoodSearch] = useState(false)
   const { data: searchResults = [] } = useSearchFoods(searchQuery)
   const { data: categories = [] } = useFoodCategories()
-  const [isLoggingMeal, setIsLoggingMeal] = useState(false)
+  const { mutate: logMealMutation, isPending: isLoggingMeal } = useLogMeal()
+  const { mutate: deleteMealMutation } = useDeleteMeal()
 
-  const handleAddFood = async (food) => {
-    if (isLoggingMeal) return
-    
-    try {
-      setIsLoggingMeal(true)
-      await logMeal(selectedMealType, food)
-      
-      // Refresh meals data
-      queryClient.invalidateQueries({ queryKey: ['meals', today] })
-      
-      // Close modal and reset
-      setShowFoodSearch(false)
-      setSearchQuery('')
-      
-      // Show success (could add toast notification here)
-      console.log('Meal logged successfully!')
-    } catch (err) {
-      console.error('Failed to log meal:', err)
-      alert('Failed to log meal. Please try again.')
-    } finally {
-      setIsLoggingMeal(false)
+  const handleAddFood = (food) => {
+    logMealMutation(
+      { mealType: selectedMealType, food },
+      { 
+        onSuccess: () => { 
+          setShowFoodSearch(false)
+          setSearchQuery('')
+        }
+      }
+    )
+  }
+
+  const handleDeleteMeal = (mealId) => {
+    if (confirm('Delete this meal?')) {
+      deleteMealMutation(mealId)
     }
   }
 
@@ -55,7 +47,18 @@ export default function Meals() {
                 {isLoading
                   ? [1,2,3].map(i => <Skeleton key={i} h={56} radius={14}/>)
                   : data?.items?.map((m) => (
-                    <MealCard key={m.id} emoji={m.emoji} name={m.name} type={m.type} time={m.time} calories={m.calories} bg={m.bg}/>
+                    <MealCard 
+                      key={m.id} 
+                      id={m.id}
+                      emoji={m.emoji} 
+                      name={m.name} 
+                      type={m.type} 
+                      time={m.time} 
+                      calories={m.calories} 
+                      bg={m.bg}
+                      onEdit={() => {}}
+                      onDelete={() => handleDeleteMeal(m.id)}
+                    />
                   ))
                 }
                 <div className={styles.addPlaceholder}>🌙 Log dinner · expected 7:00 PM</div>
