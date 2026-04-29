@@ -190,7 +190,7 @@ async def get_weekly_meals(request: Request):
         }
     }
 
-@router.delete("/api/meals/{meal_id}")
+@router.delete("/meals/{meal_id}")
 async def delete_meal(meal_id: str, request: Request):
     """Delete a meal log"""
     user = get_current_user(request)
@@ -212,58 +212,6 @@ async def delete_meal(meal_id: str, request: Request):
     return {
         "success": True,
         "data": {"message": "Meal deleted"}
-    }
-
-@router.get("/nutrition/today")
-async def get_today_nutrition(request: Request):
-    """Get today's nutrition summary"""
-    user = get_current_user(request)
-    db = get_db()
-    user_id = user["userId"]
-    
-    today = datetime.utcnow().strftime("%Y-%m-%d")
-    
-    # Get today's meals
-    meals = await db.meal_logs.find({
-        "user_id": user_id,
-        "date": today
-    }).to_list(None)
-    
-    # Get targets
-    targets = await db.nutrition_targets.find_one({"user_id": user_id})
-    
-    # Calculate totals
-    total_calories = sum(m["total_calories"] for m in meals)
-    total_protein = sum(m["total_protein_g"] for m in meals)
-    total_carbs = sum(m["total_carbs_g"] for m in meals)
-    total_fats = sum(m["total_fats_g"] for m in meals)
-    
-    return {
-        "success": True,
-        "data": {
-            "date": today,
-            "nutrition": {
-                "calories": {
-                    "current": total_calories,
-                    "goal": targets.get("calories", 2000) if targets else 2000,
-                    "remaining": max(0, (targets.get("calories", 2000) if targets else 2000) - total_calories),
-                },
-                "protein": {
-                    "current": total_protein,
-                    "goal": targets.get("protein_g", 110) if targets else 110,
-                    "remaining": max(0, (targets.get("protein_g", 110) if targets else 110) - total_protein),
-                },
-                "carbs": {
-                    "current": total_carbs,
-                    "goal": targets.get("carbs_g", 250) if targets else 250,
-                },
-                "fats": {
-                    "current": total_fats,
-                    "goal": targets.get("fats_g", 70) if targets else 70,
-                },
-            },
-            "mealsLogged": len(meals),
-        }
     }
 
 # Helper functions

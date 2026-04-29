@@ -11,7 +11,7 @@ from app.database import db
 import re
 from typing import Dict, List, Optional
 
-router = APIRouter(prefix="/voice", tags=["voice"])
+router = APIRouter()
 
 # Pydantic models
 class VoiceMealLog(BaseModel):

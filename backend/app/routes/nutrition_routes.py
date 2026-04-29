@@ -10,7 +10,7 @@ from app.routes.auth_routes import get_current_user
 
 router = APIRouter()
 
-@router.get("/api/nutrition/today")
+@router.get("/nutrition/today")
 async def get_nutrition_today(request: Request):
     """Get today's nutrition breakdown"""
     user = get_current_user(request)
@@ -109,7 +109,7 @@ async def get_nutrition_today(request: Request):
     }
 
 
-@router.get("/api/nutrition/summary")
+@router.get("/nutrition/summary")
 async def get_nutrition_summary(request: Request, days: int = 7):
     """Get nutrition summary for past N days"""
     user = get_current_user(request)
