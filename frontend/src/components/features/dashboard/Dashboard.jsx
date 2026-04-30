@@ -1,13 +1,15 @@
 import { useEffect } from 'react'
 import { useDashboard, useMeals } from '@hooks/useQueries'
 import { useAppStore } from '@store'
+import { useNavigate } from '@tanstack/react-router'
 import { Card, CardHeader, CardBody, GoalRing, AiNote, MealCard, ProgressBar, Badge, BtnPrimary, BtnGhost, Skeleton } from '@ui'
 import styles from './Dashboard.module.css'
 
 export default function Dashboard() {
   const { data: dash, isLoading: dashLoading } = useDashboard()
   const { data: meals, isLoading: mealsLoading } = useMeals()
-  const { setActivePage, setVoiceOpen, setUser, setMeals: setMealsState, setBadges, setCycle } = useAppStore()
+  const navigate = useNavigate()
+  const { setVoiceOpen, setUser, setMeals: setMealsState, setBadges, setCycle } = useAppStore()
 
   useEffect(() => {
     if (!dash) return
@@ -72,7 +74,7 @@ export default function Dashboard() {
               ? <><Skeleton h={14}/><Skeleton h={14} w="80%" style={{ marginTop: 8 }}/></>
               : <AiNote text={dash?.aiNudge?.text} chips={dash?.aiNudge?.chips || []}/>
             }
-            <BtnPrimary style={{ width: '100%', marginTop: 12, justifyContent: 'center' }} onClick={() => setActivePage('chat')}>
+            <BtnPrimary style={{ width: '100%', marginTop: 12, justifyContent: 'center' }} onClick={() => navigate({ to: '/chat' })}>
               Ask NutriAI →
             </BtnPrimary>
           </CardBody>

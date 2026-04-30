@@ -75,7 +75,7 @@ export default function Chat() {
                 </div>
                 {msg.chips?.length > 0 && (
                   <div className={styles.chipRow}>
-                    {msg.chips.map((c) => <button key={c} className={styles.suggBtn} onClick={() => send(c)}>{c}</button>)}
+                    {msg.chips.map((c, i) => <button key={`chip-${msg.id}-${i}`} className={styles.suggBtn} onClick={() => send(c)}>{c}</button>)}
                   </div>
                 )}
               </div>
