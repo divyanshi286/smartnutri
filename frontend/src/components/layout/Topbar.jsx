@@ -1,9 +1,12 @@
 import { useAppStore } from '@store'
+import { useNavigate } from '@tanstack/react-router'
 import { IconBtn, BtnPrimary } from '@ui'
 import styles from './Topbar.module.css'
 
 export default function Topbar({ title }) {
   const { setVoiceOpen, setSidebarOpen } = useAppStore()
+  const navigate = useNavigate()
+  
   return (
     <header className={styles.topbar}>
       <button className={styles.menuBtn} onClick={() => setSidebarOpen(true)}>≡</button>
@@ -12,7 +15,7 @@ export default function Topbar({ title }) {
         <IconBtn onClick={() => setVoiceOpen(true)} title="Voice Input">Mic</IconBtn>
         <IconBtn title="Notifications">Alerts</IconBtn>
         <IconBtn title="Search">Search</IconBtn>
-        <BtnPrimary style={{ padding: '7px 16px', fontSize: 13 }}>+ Log Meal</BtnPrimary>
+        <BtnPrimary style={{ padding: '7px 16px', fontSize: 13 }} onClick={() => navigate({ to: '/meals' })}>+ Log Meal</BtnPrimary>
       </div>
     </header>
   )
