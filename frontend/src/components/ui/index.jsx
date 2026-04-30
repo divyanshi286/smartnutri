@@ -48,6 +48,7 @@ export function GoalRing({ value, goal, label, unit, color = 'var(--p1)', size =
   const circ = 2 * Math.PI * r
   const pct = Math.min(value / goal, 1)
   const offset = circ * (1 - pct)
+  const displayValue = Math.round(value * 10) / 10 // Round to 1 decimal place
   return (
     <div className={styles.ringTile}>
       <div className={styles.ringWrap} style={{ width: size, height: size }}>
@@ -61,7 +62,7 @@ export function GoalRing({ value, goal, label, unit, color = 'var(--p1)', size =
           />
         </svg>
         <div className={styles.ringCenter}>
-          <span className={styles.ringVal} style={{ color }}>{value}{unit}</span>
+          <span className={styles.ringVal} style={{ color }}>{displayValue}{unit}</span>
         </div>
       </div>
       <span className={styles.ringName}>{label}</span>
@@ -73,12 +74,13 @@ export function GoalRing({ value, goal, label, unit, color = 'var(--p1)', size =
 /* ─────────────── PROGRESS BAR ─────────────── */
 export function ProgressBar({ label, current, goal, unit = '', color = 'var(--grad)', valueColor, warn }) {
   const pct = Math.min((current / goal) * 100, 100)
+  const displayCurrent = Math.round(current * 10) / 10 // Round to 1 decimal place
   return (
     <div className={styles.progItem}>
       <div className={styles.progRow}>
         <span className={styles.progLabel}>{label}</span>
         <span className={styles.progValue} style={{ color: valueColor || (warn ? '#e879a0' : 'var(--muted)') }}>
-          {current} / {goal}{unit}{warn ? ' ⚠️' : ''}
+          {displayCurrent} / {goal}{unit}{warn ? ' ⚠️' : ''}
         </span>
       </div>
       <div className={styles.progTrack}>

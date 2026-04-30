@@ -258,10 +258,13 @@ async def get_voice_examples():
     """
     Get example voice commands for the user.
     """
-    return [
-        "Log dal rice for lunch",
-        "How much protein do I have today?",
-        "Add 2 glasses of water",
-        "What foods help with my health goals?",
-        "Show my weekly progress",
-    ]
+    return {
+        "success": True,
+        "data": [
+            "Log dal rice for lunch",
+            "How much protein do I have today?",
+            "Add 2 glasses of water",
+            "What foods help with my health goals?",
+            "Show my weekly progress",
+        ]
+    }
